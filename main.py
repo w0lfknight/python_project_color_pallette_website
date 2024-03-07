@@ -1,7 +1,7 @@
 import sys
 from colorthief import ColorThief
 import matplotlib.pyplot as plt
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 from flask_bootstrap import Bootstrap
 app = Flask(__name__)
 
@@ -14,17 +14,31 @@ app = Flask(__name__)
 
 # plt.imshow([[palette[i] for i in range(5)]])
 # plt.show()
-
+file_path = None
 
 @app.route('/', methods=["GET","POST"])
 def main():
+
+    global file_path
     hex_colors = []
 
     if request.method == "POST":
+        if 'file' not in request.files:
+            return 'No file part'
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return 'No selected file'
+
+        # Save the uploaded file
+        file_path = 'static/uploads/' + file.filename
+        file.save(file_path)
+
+        # Get the URL of the uploaded file
 
 
-        image = request.form.get("image_address")
-        ct = ColorThief(f"static/img/{image}")
+        ct = ColorThief(file_path)
         palette = ct.get_palette(color_count=5)
         for color in palette:
 
@@ -32,7 +46,7 @@ def main():
             hex_colors.append(hex_color)
 
 
-    return render_template("index.html", hex_codes = hex_colors)
+    return render_template("index.html", hex_codes = hex_colors, file_url=file_path, uploaded=True)
 
 if __name__ == "__main__":
     app.run(debug=True)

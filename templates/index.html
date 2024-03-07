@@ -14,12 +14,13 @@
     </div>
     <div class="main-object">
         <p class="heading">Demo</p>
-        
-        <img src="/static/img/sample.jpg"  alt="" width="100%">
-        <table class="table">
+
+        {% if file_url %}
+                <img src="{{file_url}}"  alt="" width="100%">
+                        <table class="table">
             <thead>
               <tr>
-                
+
                 <th scope="col">Color</th>
                 <th scope="col">Color Code</th>
                 <th scope="col">Percentage(not available right now)</th>
@@ -33,13 +34,13 @@
 <!--                <td>@mdo</td>-->
               </tr>
               <tr>
-                
+
                 <td style="background-color:{{hex_codes[1]}}" > </td>
                 <td>#f0a800</td>
 <!--                <td>@fat</td>-->
               </tr>
               <tr>
-                
+
                 <td style="background-color:{{hex_codes[2]}}" > </td>
                 <td>#8e44ad</td>
 <!--                <td>@mdo</td>-->
@@ -59,10 +60,16 @@
 
             </tbody>
           </table>
-        <form action="" method="post">
+        {% else %}
+
+            <img src="/static/img/sample.jpg"  alt="" width="100%">
+        {% endif %}
+
+        <form action="" method="post" enctype="multipart/form-data" action="/upload">
             <label for="">File To Upload:</label>
             <div style="border: solid black 2px;width: 35%;">
-                <input  type="file" name="image_address" id="image_address"  accept="image/*,.jpg" />
+                <input  type="file" name="file"  id="image_address"  accept="image/*,.jpg" />
+<!--                <input type="submit" value="Upload">-->
             </div>
 <!--            <label for="">Number Of Colors:</label>-->
 <!--            <div>-->
